@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
-const connection = require('./config.js'); // config containing database url
+const config = require('./config.js'); // config containing database url
 const passport = require("passport");
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
@@ -12,7 +12,7 @@ var authenticate = require("./authenticate");
 
 // database connection
 async function run() {
-  await mongoose.connect(connection);
+  await mongoose.connect(config.server);
   // checking connection state
   if (mongoose.connection.readyState == 1)
     console.log("Database connection established!");
@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use(session({
   name: "session-id",
-  secret: "12345-67890-09876-54321",
+  secret: config.secret,
   saveUninitialized: false,
   resave: false,
   store: new FileStore()
