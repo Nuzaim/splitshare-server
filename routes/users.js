@@ -29,4 +29,17 @@ router.post("/login", passport.authenticate('local'), function(req, res, next) {
   res.json({ success: true, status: "You are successfully logged in!" });
 })
 
+// logout from the current user
+router.get("/logout", function(req, res) {
+  if (req.session) {
+    req.session.destroy();
+    res.clearCookie("session-id");
+    res.redirect("/");
+  } else {
+    const err = new Error("You are not logged in!");
+    err.status = 403
+    next(err);
+  }
+})
+
 module.exports = router;
